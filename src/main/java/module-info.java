@@ -11,4 +11,12 @@ module application {
 
     opens util to javafx.fxml;
     exports util;
+
+    opens model.services to javafx.fxml;
+    exports model.services;
+
+    opens model.entities to javafx.fxml;
+    exports model.entities;
+
+
 }
