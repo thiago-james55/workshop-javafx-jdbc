@@ -8,4 +8,7 @@ module application {
 
     opens controller to javafx.fxml;
     exports controller;
+
+    opens util to javafx.fxml;
+    exports util;
 }
