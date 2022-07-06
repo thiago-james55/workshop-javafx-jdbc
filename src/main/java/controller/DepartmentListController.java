@@ -27,25 +27,6 @@ public class DepartmentListController implements Initializable {
 
     private DepartmentService service;
 
-    //DepartmentForm
-
-    @FXML
-    private Label labelTitle;
-
-    @FXML
-    private TextField textFieldId;
-
-    @FXML
-    private TextField textFieldName;
-
-    @FXML
-    private Button buttonSave;
-
-    @FXML
-    private Button buttonCancel;
-
-    //DepartmentList
-
     @FXML
     private Button buttonNew;
 
