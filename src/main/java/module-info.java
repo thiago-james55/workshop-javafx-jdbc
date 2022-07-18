@@ -13,6 +13,9 @@ module application {
     opens db to javafx.fxml;
     exports db;
 
+    opens listeners to javafx.fxml;
+    exports listeners;
+
     opens model.dao to javafx.fxml;
     exports model.dao;
 

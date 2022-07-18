@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import listeners.DataChangeListener;
 import model.entities.Department;
 import model.services.DepartmentService;
 import util.Alerts;
@@ -15,6 +16,8 @@ import util.Constraints;
 import util.Utils;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DepartmentFormController implements Initializable {
@@ -22,6 +25,8 @@ public class DepartmentFormController implements Initializable {
     private Department entity;
 
     private DepartmentService service;
+
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
     private Label labelTitle;
@@ -49,6 +54,10 @@ public class DepartmentFormController implements Initializable {
         this.service = service;
     }
 
+    public void subscribeDataChangeListener(DataChangeListener listener) {
+        dataChangeListeners.add(listener);
+    }
+
     @FXML
     public void onButtonSaveAction(ActionEvent event) {
         if (entity == null) {
@@ -61,10 +70,15 @@ public class DepartmentFormController implements Initializable {
             entity = getFormData();
             service.saveOrUpdate(entity);
             Alerts.showAlert("Success!" , null , "Department saved successful!", Alert.AlertType.INFORMATION);
+            notifyDataChangeListeners();
             Utils.currentStage(event).close();
         } catch (DbException e) {
             Alerts.showAlert("Error saving object" , null , e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void notifyDataChangeListeners() {
+        dataChangeListeners.forEach(x -> x.onDataChanged());
     }
 
     private Department getFormData() {
@@ -79,7 +93,7 @@ public class DepartmentFormController implements Initializable {
 
     @FXML
     public void onButtonCancelAction(ActionEvent event) {
-        Utils.currentStage(event).close();;
+        Utils.currentStage(event).close();
     }
 
     @Override
