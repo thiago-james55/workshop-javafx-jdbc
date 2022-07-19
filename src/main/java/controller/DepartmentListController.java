@@ -1,6 +1,7 @@
 package controller;
 
 import application.Main;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +42,9 @@ public class DepartmentListController implements Initializable , DataChangeListe
     private TableColumn<Department, String> tableColumnName;
 
     @FXML
+    private TableColumn<Department,Department> tableColumnEdit;
+
+    @FXML
     public void onButtonNewAction(ActionEvent event) {
        Stage parentStage = Utils.currentStage(event);
        Department obj = new Department();
@@ -78,6 +82,7 @@ public class DepartmentListController implements Initializable , DataChangeListe
 
         observableList = FXCollections.observableArrayList(list);
         tableViewDepartment.setItems(observableList);
+        initEditButtons();
     }
 
     private void createDialogForm(Department obj, String absoluteName, Stage parentStage) {
@@ -103,6 +108,25 @@ public class DepartmentListController implements Initializable , DataChangeListe
             e.printStackTrace();
             Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void initEditButtons() {
+        tableColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEdit.setCellFactory(param -> new TableCell<Department, Department>() {
+            private final Button button = new Button("edit");
+            @Override
+            protected void updateItem(Department obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(
+                        event -> createDialogForm(
+                                obj, "/gui/DepartmentForm.fxml",Utils.currentStage(event)));
+            }
+        });
     }
 
     @Override
