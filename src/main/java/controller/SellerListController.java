@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.entities.Seller;
+import model.services.DepartmentService;
 import model.services.SellerService;
 import util.Alerts;
 import util.Utils;
@@ -115,9 +116,10 @@ public class SellerListController implements Initializable , DataChangeListener 
 
             SellerFormController controller = loader.getController();
             controller.setSeller(obj);
-            controller.setSellerService(new SellerService());
+            controller.setServices(new SellerService(), new DepartmentService());
             controller.subscribeDataChangeListener(this);
             controller.updateFormData();
+            controller.loadAssossiatedObjects();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Seller data");
